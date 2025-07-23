@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Whisper Demo"
 include(":app")
- 
+include(":lib")
