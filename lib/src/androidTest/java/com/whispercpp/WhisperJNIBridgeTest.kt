@@ -1,4 +1,3 @@
-
 package com.whispercpp
 
 import android.content.Context
@@ -6,7 +5,7 @@ import android.content.res.AssetManager
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.whispercpp.whisper.WhisperLib
+import com.whispercpp.whisper.WhisperJNIBridge
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -41,12 +40,12 @@ class JniDirectTest {
 
 		instrumentationContext = InstrumentationRegistry.getInstrumentation().targetContext
 		try {
-			// Ensures WhisperLib.init {} is called
-			Class.forName(WhisperLib::class.java.name)
-			Log.i(TAG, "WhisperLib class accessed, native library should be loaded.")
+			// Ensures WhisperJNIBridge.init {} is called
+			WhisperJNIBridge.loadNativeLibrary()
+			Log.i(TAG, "WhisperJNIBridge.loadNativeLibrary() called successfully in JniDirectTest setup.")
 		} catch (e: Exception) {
-			Log.e(TAG, "Error ensuring WhisperLib is loaded", e)
-			fail("Failed to load classes or native library for test: ${e.message}")
+			Log.e(TAG, "Error calling WhisperJNIBridge.loadNativeLibrary() in JniDirectTest setup", e)
+			fail("Failed to load native library for JniDirectTest: ${e.message}")
 		}
 	}
 
@@ -55,14 +54,14 @@ class JniDirectTest {
 		Log.i(TAG, "Starting testNativeGetSystemInfo...")
 		val sysInfo: String?
 		try {
-			sysInfo = WhisperLib.getSystemInfo()
+			sysInfo = WhisperJNIBridge.getSystemInfo()
 			Log.i(TAG, "Native System Info: $sysInfo")
 			assertNotNull("System info string from JNI should not be null", sysInfo)
 			assertFalse("System info string from JNI should not be empty", sysInfo.isEmpty())
 		} catch (e: Throwable) {
 			Log.e(TAG, "Exception calling native getSystemInfo: ${e.message}", e)
 			if (e is UnsatisfiedLinkError) {
-				Log.e(TAG, "UnsatisfiedLinkError for getSystemInfo: Ensure C function name is Java_com_whispercpp_whisper_WhisperLib_getSystemInfo")
+				Log.e(TAG, "UnsatisfiedLinkError for getSystemInfo: Ensure C function name is Java_com_whispercpp_whisper_WhisperJNIBridge_getSystemInfo")
 			}
 			fail("testNativeGetSystemInfo failed: ${e.message}")
 		}
@@ -87,8 +86,8 @@ class JniDirectTest {
 			// For simplicity, let's try with the direct asset InputStream first.
 
 			// 2. Call initContextFromInputStream
-			Log.i(TAG, "Calling WhisperLib.initContextFromInputStream...")
-			contextPtr = WhisperLib.initContextFromInputStream(inputStream)
+			Log.i(TAG, "Calling WhisperJNIBridge.initContextFromInputStream...")
+			contextPtr = WhisperJNIBridge.initContextFromInputStream(inputStream)
 			Log.i(TAG, "Native context pointer from InputStream: $contextPtr")
 			assertTrue("Context pointer should be non-zero after init", contextPtr != 0L)
 
@@ -97,15 +96,15 @@ class JniDirectTest {
 		} catch (e: Throwable) {
 			Log.e(TAG, "Exception during initContextFromInputStream: ${e.message}", e)
 			if (e is UnsatisfiedLinkError) {
-				Log.e(TAG, "UnsatisfiedLinkError for initContextFromInputStream: Ensure C function name is Java_com_whispercpp_whisper_WhisperLib_initContextFromInputStream")
+				Log.e(TAG, "UnsatisfiedLinkError for initContextFromInputStream: Ensure C function name is Java_com_whispercpp_whisper_WhisperJNIBridge_initContextFromInputStream")
 			}
 			fail("testNativeInitContextFromInputStream failed: ${e.message}")
 		} finally {
 			// 3. Call freeContext if context was initialized
 			if (contextPtr != 0L) {
-				Log.i(TAG, "Calling WhisperLib.freeContext with pointer: $contextPtr")
+				Log.i(TAG, "Calling WhisperJNIBridge.freeContext with pointer: $contextPtr")
 				try {
-					WhisperLib.freeContext(contextPtr)
+					WhisperJNIBridge.freeContext(contextPtr)
 					Log.i(TAG, "Successfully called freeContext.")
 					// If freeContext is supposed to invalidate the pointer,
 					// you might not be able to check its value afterwards from C,
@@ -113,7 +112,7 @@ class JniDirectTest {
 				} catch (e: Throwable) {
 					Log.e(TAG, "Exception during freeContext: ${e.message}", e)
 					if (e is UnsatisfiedLinkError) {
-						Log.e(TAG, "UnsatisfiedLinkError for freeContext: Ensure C function name is Java_com_whispercpp_whisper_WhisperLib_freeContext")
+						Log.e(TAG, "UnsatisfiedLinkError for freeContext: Ensure C function name is Java_com_whispercpp_whisper_WhisperJNIBridge_freeContext")
 					}
 					// It's often better to let the test fail here if freeContext itself fails
 					fail("freeContext failed: ${e.message}")
@@ -144,22 +143,22 @@ class JniDirectTest {
 
 		try {
 			val assetManager: AssetManager = instrumentationContext.assets
-			Log.i(TAG, "Calling WhisperLib.initContextFromAsset with path: $modelAssetPath")
-			contextPtr = WhisperLib.initContextFromAsset(assetManager, modelAssetPath)
+			Log.i(TAG, "Calling WhisperJNIBridge.initContextFromAsset with path: $modelAssetPath")
+			contextPtr = WhisperJNIBridge.initContextFromAsset(assetManager, modelAssetPath)
 			Log.i(TAG, "Native context pointer from Asset: $contextPtr")
 			assertTrue("Context pointer from asset should be non-zero after init", contextPtr != 0L)
 
 		} catch (e: Throwable) {
 			Log.e(TAG, "Exception during initContextFromAsset: ${e.message}", e)
 			if (e is UnsatisfiedLinkError) {
-				Log.e(TAG, "UnsatisfiedLinkError for initContextFromAsset: Ensure C function name is Java_com_whispercpp_whisper_WhisperLib_00024Companion_initContextFromAsset")
+				Log.e(TAG, "UnsatisfiedLinkError for initContextFromAsset: Ensure C function name is Java_com_whispercpp_whisper_WhisperJNIBridge_00024Companion_initContextFromAsset")
 			}
 			fail("testNativeInitContextFromAsset failed: ${e.message}")
 		} finally {
 			if (contextPtr != 0L) {
-				Log.i(TAG, "Calling WhisperLib.freeContext with asset-loaded pointer: $contextPtr")
+				Log.i(TAG, "Calling WhisperJNIBridge.freeContext with asset-loaded pointer: $contextPtr")
 				try {
-					WhisperLib.freeContext(contextPtr) // freeContext should work for any valid context
+					WhisperJNIBridge.freeContext(contextPtr) // freeContext should work for any valid context
 					Log.i(TAG, "Successfully called freeContext for asset-loaded context.")
 				} catch (e: Throwable) {
 					Log.e(TAG, "Exception during freeContext for asset-loaded context: ${e.message}", e)
@@ -187,8 +186,8 @@ class JniDirectTest {
 			Log.i(TAG, "Copied $modelAssetName to ${cacheFile.absolutePath}")
 
 			// 2. Call initContext with file path
-			Log.i(TAG, "Calling WhisperLib.initContext with path: ${cacheFile.absolutePath}")
-			contextPtr = WhisperLib.initContext(cacheFile.absolutePath)
+			Log.i(TAG, "Calling WhisperJNIBridge.initContext with path: ${cacheFile.absolutePath}")
+			contextPtr = WhisperJNIBridge.initContext(cacheFile.absolutePath)
 			Log.i(TAG, "Native context pointer from File: $contextPtr")
 			assertTrue("Context pointer from file path should be non-zero after init", contextPtr != 0L)
 
@@ -197,8 +196,8 @@ class JniDirectTest {
 			fail("testNativeInitContextFromFilePath failed: ${e.message}")
 		} finally {
 			if (contextPtr != 0L) {
-				Log.i(TAG, "Calling WhisperLib.freeContext with file-loaded pointer: $contextPtr")
-				WhisperLib.freeContext(contextPtr)
+				Log.i(TAG, "Calling WhisperJNIBridge.freeContext with file-loaded pointer: $contextPtr")
+				WhisperJNIBridge.freeContext(contextPtr)
 				Log.i(TAG, "Successfully called freeContext for file-loaded context.")
 			}
 			cacheFile.delete() // Clean up the copied file
@@ -218,7 +217,7 @@ class JniDirectTest {
 		try {
 			// 1. Initialize context (using Asset for simplicity)
 			val assetManager: AssetManager = instrumentationContext.assets
-			contextPtr = WhisperLib.initContextFromAsset(assetManager, modelAssetPath)
+			contextPtr = WhisperJNIBridge.initContextFromAsset(assetManager, modelAssetPath)
 			Log.i(TAG, "Native context pointer from Asset for transcription: $contextPtr")
 			assertTrue("Context pointer for transcription should be non-zero", contextPtr != 0L)
 
@@ -229,23 +228,23 @@ class JniDirectTest {
 			Log.i(TAG, "Loaded audio data, length: ${audioData.size}")
 
 			// 3. Call fullTranscribe
-			Log.i(TAG, "Calling WhisperLib.fullTranscribe...")
-			WhisperLib.fullTranscribe(contextPtr, numThreads, audioData)
+			Log.i(TAG, "Calling WhisperJNIBridge.fullTranscribe...")
+			WhisperJNIBridge.fullTranscribe(contextPtr, numThreads, audioData)
 			// No direct return value to assert, but we expect it not to crash
 			// and to populate segments in the native context.
-			Log.i(TAG, "WhisperLib.fullTranscribe completed.")
+			Log.i(TAG, "WhisperJNIBridge.fullTranscribe completed.")
 
 			// 4. Get segment count
-			val segmentCount = WhisperLib.getTextSegmentCount(contextPtr)
+			val segmentCount = WhisperJNIBridge.getTextSegmentCount(contextPtr)
 			Log.i(TAG, "Segment count: $segmentCount")
 			assertTrue("Segment count should be >= 0", segmentCount >= 0)
 
 			// 5. Get and log segment details (if any)
 			if (segmentCount > 0) {
 				for (i in 0 until segmentCount) {
-					val segmentText = WhisperLib.getTextSegment(contextPtr, i)
-					val t0 = WhisperLib.getTextSegmentT0(contextPtr, i)
-					val t1 = WhisperLib.getTextSegmentT1(contextPtr, i)
+					val segmentText = WhisperJNIBridge.getTextSegment(contextPtr, i)
+					val t0 = WhisperJNIBridge.getTextSegmentT0(contextPtr, i)
+					val t1 = WhisperJNIBridge.getTextSegmentT1(contextPtr, i)
 					Log.i(TAG, "Segment $i: [$t0 ms - $t1 ms] '$segmentText'")
 					assertNotNull("Segment text should not be null", segmentText)
 					// You could add more specific assertions if you know the expected transcription
@@ -260,8 +259,8 @@ class JniDirectTest {
 			fail("testNativeFullTranscribeAndSegments failed: ${e.message}")
 		} finally {
 			if (contextPtr != 0L) {
-				Log.i(TAG, "Calling WhisperLib.freeContext for transcription test pointer: $contextPtr")
-				WhisperLib.freeContext(contextPtr)
+				Log.i(TAG, "Calling WhisperJNIBridge.freeContext for transcription test pointer: $contextPtr")
+				WhisperJNIBridge.freeContext(contextPtr)
 				Log.i(TAG, "Successfully called freeContext for transcription test.")
 			}
 		}
