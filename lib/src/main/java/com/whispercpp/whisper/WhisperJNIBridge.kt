@@ -63,9 +63,13 @@ object WhisperJNIBridge {
     private const val LIBRARY_NAME_TO_LOAD = "whisper-jni" // Use const for clarity if it's fixed
     private var isLibraryLoaded = false
 
+    init {
+        loadNativeLibrary()
+    }
+
 
     @Synchronized // Ensure thread-safe loading
-    fun loadNativeLibrary() {
+    private fun loadNativeLibrary() {
         if (isLibraryLoaded) {
             // Log.i(TAG, "Native library '$LIBRARY_NAME_TO_LOAD' already loaded.") // Optional: less verbose
             return

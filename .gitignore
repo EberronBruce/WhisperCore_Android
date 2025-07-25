@@ -13,3 +13,24 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/release/
+
+# Model binaries in app assets (keep the folder structure)
+app/src/main/assets/models/*.bin
+app/src/main/assets/models/*.ggml
+
+# Model binaries in lib androidTest assets (if you want to ignore them)
+lib/src/androidTest/assets/*.bin
+lib/src/androidTest/assets/*.ggml
+
+# Other common ignores (you might already have some of these)
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Keystore files
+*.jks
+*.keystore
+
