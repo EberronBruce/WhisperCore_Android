@@ -69,7 +69,7 @@ object WhisperJNIBridge {
 
 
     @Synchronized // Ensure thread-safe loading
-    private fun loadNativeLibrary() {
+    internal fun loadNativeLibrary() {
         if (isLibraryLoaded) {
             // Log.i(TAG, "Native library '$LIBRARY_NAME_TO_LOAD' already loaded.") // Optional: less verbose
             return

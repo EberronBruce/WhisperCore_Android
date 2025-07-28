@@ -25,7 +25,7 @@ interface IWhisperJNI {
 // Add 'jni: IWhisperJNI' to the constructor
 class WhisperContext private constructor(
 	private var ptr: Long,
-	private val jni: IWhisperJNI // << ADD THIS PARAMETER
+	private val jni: IWhisperJNI,
 ) {
 	private val scope: CoroutineScope = CoroutineScope(
 		Executors.newSingleThreadExecutor().asCoroutineDispatcher()
@@ -63,12 +63,14 @@ class WhisperContext private constructor(
 
 	suspend fun benchMemory(nthreads: Int): String = withContext(scope.coroutineContext) {
 		require(ptr != 0L)
-		jni.benchMemcpy(nthreads) // << CHANGE HERE
+		require(nthreads >= 1) { "Benchmark nthreads must be >= 1" }
+		jni.benchMemcpy(nthreads)
 	}
 
 	suspend fun benchGgmlMulMat(nthreads: Int): String = withContext(scope.coroutineContext) {
 		require(ptr != 0L)
-		jni.benchGgmlMulMat(nthreads) // << CHANGE HERE
+		require(nthreads >= 1) { "Benchmark nthreads must be >= 1" }
+		jni.benchGgmlMulMat(nthreads)
 	}
 
 	companion object {

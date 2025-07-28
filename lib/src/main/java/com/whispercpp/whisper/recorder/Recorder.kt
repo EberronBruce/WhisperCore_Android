@@ -1,11 +1,11 @@
-package com.redravencomputing.whisperdemo.recorder
+package com.whispercpp.whisper.recorder
 
 import android.Manifest
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import androidx.annotation.RequiresPermission
-import com.redravencomputing.whisperdemo.media.encodeWaveFile
+import com.whispercpp.whisper.media.encodeWaveFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -26,7 +26,6 @@ class Recorder {
 
 	suspend fun stopRecording() = withContext(scope.coroutineContext) {
 		recorder?.stopRecording()
-		@Suppress("BlockingMethodInNonBlockingContext")
 		recorder?.join()
 		recorder = null
 	}
@@ -39,7 +38,7 @@ private class AudioRecordThread(
 	Thread("AudioRecorder") {
 	private var quit = AtomicBoolean(false)
 
-//	@SuppressLint("MissingPermission")
+	//	@SuppressLint("MissingPermission")
 	@RequiresPermission(Manifest.permission.RECORD_AUDIO)
 	override fun run() {
 		try {

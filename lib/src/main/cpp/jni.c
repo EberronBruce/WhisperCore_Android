@@ -554,15 +554,38 @@ Java_com_whispercpp_whisper_WhisperJNIBridge_getSystemInfo(
 JNIEXPORT jstring JNICALL
 Java_com_whispercpp_whisper_WhisperJNIBridge_benchMemcpy(JNIEnv *env, jobject thiz, jint n_threads) {
     UNUSED(thiz);
+    __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "Entering benchMemcpy, n_threads: %d", n_threads);
+
     const char *bench_ggml_memcpy = whisper_bench_memcpy_str(n_threads);
+
+    if (bench_ggml_memcpy == NULL) {
+        __android_log_print(ANDROID_LOG_ERROR, "WhisperJNI_Benchmark", "whisper_bench_memcpy_str returned NULL!");
+        // Optionally, return a Java string indicating the error
+        // For now, let it proceed to crash or return null jstring if that's what NewStringUTF does with NULL
+        // Or, more safely:
+        return (*env)->NewStringUTF(env, "Error: whisper_bench_memcpy_str returned NULL");
+    }
+
+    __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "whisper_bench_memcpy_str returned:  %s", bench_ggml_memcpy);
     jstring string = (*env)->NewStringUTF(env, bench_ggml_memcpy);
+    __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "Exiting benchMemcpy");
     return string;
 }
 
 JNIEXPORT jstring JNICALL
 Java_com_whispercpp_whisper_WhisperJNIBridge_benchGgmlMulMat(JNIEnv *env, jobject thiz, jint n_threads) {
     UNUSED(thiz);
+    __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "Entering benchGgmlMulMat, n_threads: %d", n_threads);
+
     const char *bench_ggml_mul_mat = whisper_bench_ggml_mul_mat_str(n_threads);
+
+    if (bench_ggml_mul_mat == NULL) {
+        __android_log_print(ANDROID_LOG_ERROR, "WhisperJNI_Benchmark", "whisper_bench_ggml_mul_mat_str returned NULL!");
+        return (*env)->NewStringUTF(env, "Error: whisper_bench_ggml_mul_mat_str returned NULL");
+    }
+    __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "whisper_bench_ggml_mul_mat_str returned: %s", bench_ggml_mul_mat);
+
     jstring string = (*env)->NewStringUTF(env, bench_ggml_mul_mat);
+    __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "Exiting benchGgmlMulMat");
     return string;
 }
