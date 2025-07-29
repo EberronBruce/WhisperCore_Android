@@ -19,7 +19,7 @@ import java.io.File
  * This class aims to provide an interface similar to its Swift counterpart.
  */
 class Whisper(applicationContext: Context,     // Allow injecting controller for testing
-              internal val controllerOverride: WhisperState? = null) { // Constructor now only takes Context
+              controllerOverride: WhisperState? = null) { // Constructor now only takes Context
 
 	private val appContext: Context = applicationContext.applicationContext // Ensure app context
 	private val controller: WhisperState = controllerOverride ?: run {
@@ -231,7 +231,7 @@ class Whisper(applicationContext: Context,     // Allow injecting controller for
 	 */
 	fun startRecording() { // Matches Swift's async nature by being callable from main
 		Log.d(TAG, "startRecording called.")
-		apiScope.launch(Dispatchers.Default) { // Perform actual recording start off the main thread
+		apiScope.launch { // Perform actual recording start off the main thread
 			controller.startRecording()
 			// State update (isRecording) happens within controller.startRecording()
 			// Delegate calls for errors also happen within controller.startRecording()
@@ -267,7 +267,7 @@ class Whisper(applicationContext: Context,     // Allow injecting controller for
 				controller.stopRecording()
 			}
 		} else {
-			apiScope.launch(Dispatchers.Default) { // for startRecording (potentially blocking)
+			apiScope.launch { // for startRecording (potentially blocking)
 				controller.startRecording()
 			}
 		}
@@ -280,7 +280,7 @@ class Whisper(applicationContext: Context,     // Allow injecting controller for
 	 * @param audioFile The [File] object pointing to the audio file to transcribe.
 	 * @param log Whether to enable internal logging for this operation. Default is `false`.
 	 */
-	fun transcribeAudioFile(audioFile: File, log: Boolean = false) { // Changed to non-suspend to match Swift and use apiScope
+	fun transcribeAudioFile(audioFile: File, log: Boolean = false, timestamp: Boolean = false) { // Changed to non-suspend to match Swift and use apiScope
 		Log.d(TAG, "transcribeAudioFile called for: ${audioFile.path}, log: $log")
 		apiScope.launch {
 			if (!audioFile.exists() || !audioFile.isFile) {
@@ -293,7 +293,7 @@ class Whisper(applicationContext: Context,     // Allow injecting controller for
 				return@launch
 			}
 			// controller.transcribeAudioFile is suspend
-			controller.transcribeAudioFile(audioFile, log)
+			controller.transcribeAudioFile(audioFile, log, timestamp = timestamp)
 		}
 	}
 

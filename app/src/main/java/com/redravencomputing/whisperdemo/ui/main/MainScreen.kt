@@ -1,10 +1,18 @@
 package com.redravencomputing.whisperdemo.ui.main
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,14 +24,18 @@ import com.redravencomputing.whisperdemo.R
 
 
 @Composable
-fun MainScreen(viewModel: MainScreenViewModel) {
+fun MainScreen(viewModel: TestViewModel) {
 	MainScreen(
 		canTranscribe = viewModel.canTranscribe,
 		isRecording = viewModel.isRecording,
 		messageLog = viewModel.dataLog,
 		onBenchmarkTapped = viewModel::benchmark,
 		onTranscribeSampleTapped = viewModel::transcribeSample,
-		onRecordTapped = viewModel::toggleRecord
+		onRecordTapped = viewModel::toggleRecord,
+		onRequestPermissionResult = { granted -> // NEW callback
+			viewModel.onUIPermissionResult(granted)
+		}
+
 	)
 }
 
@@ -35,7 +47,8 @@ private fun MainScreen(
 	messageLog: String,
 	onBenchmarkTapped: () -> Unit,
 	onTranscribeSampleTapped: () -> Unit,
-	onRecordTapped: () -> Unit
+	onRecordTapped: () -> Unit,
+	onRequestPermissionResult: (Boolean) -> Unit
 ) {
 	Scaffold(
 		topBar = {
@@ -57,7 +70,8 @@ private fun MainScreen(
 				RecordButton(
 					enabled = canTranscribe,
 					isRecording = isRecording,
-					onClick = onRecordTapped
+					onClick = onRecordTapped,
+					onRequestPermissionResult = onRequestPermissionResult
 				)
 			}
 			MessageLog(messageLog)
@@ -88,10 +102,11 @@ private fun TranscribeSampleButton(enabled: Boolean, onClick: () -> Unit) {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun RecordButton(enabled: Boolean, isRecording: Boolean, onClick: () -> Unit) {
+private fun RecordButton(enabled: Boolean, isRecording: Boolean, onClick: () -> Unit, onRequestPermissionResult: (Boolean) -> Unit) {
 	val micPermissionState = rememberPermissionState(
 		permission = android.Manifest.permission.RECORD_AUDIO,
 		onPermissionResult = { granted ->
+			onRequestPermissionResult(granted)
 			if (granted) {
 				onClick()
 			}

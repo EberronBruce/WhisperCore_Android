@@ -1,7 +1,6 @@
 package com.redravencomputing.whisperdemo.ui.main
 
 import android.app.Application
-import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -203,22 +202,22 @@ class MainScreenViewModel(private val application: Application) : ViewModel() {
 	}
 }
 
-private suspend fun Context.copyData(
-	assetDirName: String,
-	destDir: File,
-	printMessage: suspend (String) -> Unit
-) = withContext(Dispatchers.IO) {
-	assets.list(assetDirName)?.forEach { name ->
-		val assetPath = "$assetDirName/$name"
-		Log.v(LOG_TAG, "Processing $assetPath...")
-		val destination = File(destDir, name)
-		Log.v(LOG_TAG, "Copying $assetPath to $destination...")
-		printMessage("Copying $name...\n")
-		assets.open(assetPath).use { input ->
-			destination.outputStream().use { output ->
-				input.copyTo(output)
-			}
-		}
-		Log.v(LOG_TAG, "Copied $assetPath to $destination")
-	}
-}
+//private suspend fun Context.copyData(
+//	assetDirName: String,
+//	destDir: File,
+//	printMessage: suspend (String) -> Unit
+//) = withContext(Dispatchers.IO) {
+//	assets.list(assetDirName)?.forEach { name ->
+//		val assetPath = "$assetDirName/$name"
+//		Log.v(LOG_TAG, "Processing $assetPath...")
+//		val destination = File(destDir, name)
+//		Log.v(LOG_TAG, "Copying $assetPath to $destination...")
+//		printMessage("Copying $name...\n")
+//		assets.open(assetPath).use { input ->
+//			destination.outputStream().use { output ->
+//				input.copyTo(output)
+//			}
+//		}
+//		Log.v(LOG_TAG, "Copied $assetPath to $destination")
+//	}
+//}
