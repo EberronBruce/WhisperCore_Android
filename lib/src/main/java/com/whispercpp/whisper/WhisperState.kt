@@ -10,7 +10,9 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.whispercpp.whisper.media.AudioDecoder
+import com.whispercpp.whisper.recorder.IRecorder
 import com.whispercpp.whisper.recorder.Recorder
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,6 +20,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.IOException
 import java.io.ObjectStreamException
 import kotlin.math.min
 
@@ -83,7 +86,10 @@ interface WhisperDelegate {
 
 class WhisperState(
 	private val applicationContext: Context, // Needed for file paths, permissions, MediaRecorder
-	private val audioDecoder: AudioDecoder
+	private val audioDecoder: AudioDecoder,
+	private val recorder: IRecorder = Recorder(),
+	private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+	private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 )  {
 
 	companion object {
@@ -111,10 +117,10 @@ class WhisperState(
 	private var mediaPlayer: MediaPlayer? = null
 	private var audioPlaybackEnabled: Boolean = true // Default as per your MainScreenViewModel
 
-	private val recorder : Recorder = Recorder()
+//	private val recorder : IRecorder = Recorder()
 
 	// Scope for this controller's operations
-	private val controllerScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+	private val controllerScope = CoroutineScope(defaultDispatcher + SupervisorJob())
 
 
 	// This performs the actual system check and updates the internal flag.
@@ -213,13 +219,26 @@ class WhisperState(
 		}
 	}
 
-	private suspend fun getTempFileForRecording() = withContext(Dispatchers.IO) {
-		File.createTempFile("recording", "wav")
+//	private suspend fun getTempFileForRecording() = withContext(Dispatchers.IO) {
+//		File.createTempFile("recording", "wav")
+//	}
+
+	private suspend fun getTempFileForRecording(): File = withContext(defaultDispatcher) { // Use injected defaultDispatcher
+		val cacheDirToUse = applicationContext.cacheDir // This will be mockCacheDir in tests
+		// Ensure the directory exists (important if the system cleans it or for first run)
+		if (!cacheDirToUse.exists()) {
+			cacheDirToUse.mkdirs()
+		}
+		try {
+			File.createTempFile("recording", ".wav", cacheDirToUse) // Use the 3-argument version
+		} catch (e: IOException) {
+			Log.e(TAG, "Failed to create temp file in ${cacheDirToUse.absolutePath}", e)
+			throw e // Rethrow to make the test fail clearly if this is the issue
+		}
 	}
 
 	// --- Recording ---
 	fun startRecording() {
-
 		if (!isMicPermissionGranted) {
 			appendToLog("Start recording: Mic permission denied after re-check.\n")
 			delegate?.recordingFailed(WhisperOperationError.MicPermissionDenied)
@@ -233,8 +252,8 @@ class WhisperState(
 		if (!isModelLoaded) { // Or maybe allow recording without model, but can't transcribe later? Your choice.
 			appendToLog("Start recording: Model not loaded. Transcription won't be possible immediately.\n")
 			// Not necessarily an error to record, but inform delegate or log
+			return
 		}
-
 
 		controllerScope.launch {
 			try {
@@ -243,14 +262,17 @@ class WhisperState(
 				recordedFile = file // Update reference
 				recorder.startRecording(file) { e ->
 					controllerScope.launch(Dispatchers.Main) {
-						Log.e(TAG, "Recording error callback from Recorder: ${e.localizedMessage}")
-						appendToLog("Recording failed in Recorder: ${e.localizedMessage}\n")
 						isRecording = false // Update state
 						recordedFile = null
 						delegate?.recordingFailed(WhisperOperationError.RecordingFailed)
+						Log.e(
+							TAG,
+							"Recording error callback from Recorder: ${e.localizedMessage}"
+						)
+						appendToLog("Recording failed in Recorder: ${e.localizedMessage}\n")
 					}
 				}
-				withContext(Dispatchers.Main) {
+				withContext(mainDispatcher) {
 					isRecording = true
 					canTranscribe = false // Can't transcribe while recording (or after until stop)
 					delegate?.didStartRecording()
@@ -259,14 +281,13 @@ class WhisperState(
 			} catch (e: Exception) {
 				Log.e(TAG, "Failed to initiate startRecording with AudioRecord-based Recorder", e)
 				// Ensure state is correct and delegate is notified on the Main thread
-				withContext(Dispatchers.Main) {
-					appendToLog("Failed to start AudioRecord recording: ${e.localizedMessage}\n")
+				withContext(mainDispatcher) {
 					isRecording = false
 					recordedFile = null
 					delegate?.recordingFailed(WhisperOperationError.RecordingFailed)
+					appendToLog("Failed to start AudioRecord recording: ${e.localizedMessage}\n")
 				}
 			}
-
 		}
 	}
 

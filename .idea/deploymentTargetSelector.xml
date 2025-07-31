@@ -4,29 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-07-27T03:20:37.277834Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/bruceburgess/.android/avd/Pixel_8_API_35.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="JniDirectTest">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-07-24T04:01:57.345985Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/bruceburgess/.android/avd/Pixel_8_API_35.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="WhisperContextInstrumentedTest">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-07-24T04:01:07.145737Z">
+        <DropdownSelection timestamp="2025-07-27T18:16:12.044955Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/Users/bruceburgess/.android/avd/Pixel_8_API_35.avd" />
@@ -36,6 +14,9 @@
         <DialogSelection />
       </SelectionState>
       <SelectionState runConfigName="Tests in 'com.whispercpp'">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testNativeFullTranscribeAndSegments()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

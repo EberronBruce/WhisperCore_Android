@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.IOException
 
 
 private const val LOG_TAG = "TestViewModel"
@@ -47,8 +48,10 @@ class TestViewModel(private val application: Application) : ViewModel(), Whisper
 
 	private suspend fun loadData() {
 		try {
-			copyAssets()
-			loadBaseModel()
+			//copyAssets()
+			//loadBaseModel()
+			copySamples()
+			loadBaseModelUsingFilePath()
 		} catch (e: Exception) {
 			Log.w(LOG_TAG, e)
 		}
@@ -188,6 +191,92 @@ class TestViewModel(private val application: Application) : ViewModel(), Whisper
 				TestViewModel(application)
 			}
 		}
+	}
+
+	private suspend fun loadBaseModelUsingFilePath() {
+		printMessage("Preparing to load model using file path...\n")
+
+		val assetModelFolderName = "models"
+		// Get the first model file name from the "models" asset folder
+		val assetModelFileName: String? = application.assets.list(assetModelFolderName)?.firstOrNull()
+
+		if (assetModelFileName == null) {
+			printMessage("Error: No models found in assets folder '$assetModelFolderName'.\n")
+			Log.e(LOG_TAG, "No models found in assets/$assetModelFolderName")
+			return
+		}
+
+		val fullAssetPath = "$assetModelFolderName/$assetModelFileName"
+		// Name for the copied file in internal storage
+		val destinationFileNameInInternalStorage = "test_model.bin"
+
+		// Copy the asset to internal storage to get a usable file path
+		val modelFileOnDevice: File? = copyAssetToInternalStorage(
+			assetPathToCopy = fullAssetPath,
+			destinationFileName = destinationFileNameInInternalStorage
+		)
+
+		if (modelFileOnDevice != null && modelFileOnDevice.exists()) {
+			printMessage("Model asset '$fullAssetPath' copied to: ${modelFileOnDevice.absolutePath}\n")
+			printMessage("Loading model from path: ${modelFileOnDevice.absolutePath}...\n")
+			try {
+				// *** This is where you use your Whisper API's file path loading method ***
+				whisper.initializeModel(modelPath = modelFileOnDevice.absolutePath, log = true)
+
+				// After the call, check if the model is loaded and update UI state
+				// Ideally, a delegate callback from 'whisper' would update this.
+				// If not, you might need to check the state directly if initializeModel is fully synchronous
+				// or if your WhisperAPI updates its internal state that canTranscribe() reflects.
+				// For now, let's assume canTranscribe might be updated by a delegate or
+				// initializeModel is synchronous enough for the next line to be somewhat accurate.
+				canTranscribe = whisper.canTranscribe() // Check state
+				if (canTranscribe) {
+					printMessage("Model loaded successfully from path (canTranscribe is true).\n")
+				} else {
+					printMessage("Model loading from path might have failed or is pending (canTranscribe is false).\n")
+				}
+
+			} catch (e: Exception) {
+				printMessage("Error initializing model from path '${modelFileOnDevice.absolutePath}': ${e.localizedMessage}\n")
+				Log.e(LOG_TAG, "Error in whisper.initializeModel from path", e)
+				canTranscribe = false
+			}
+		} else {
+			printMessage("Error: Failed to copy model asset '$fullAssetPath' to internal storage.\n")
+			Log.e(LOG_TAG, "Failed to obtain a valid file for the model from asset: $fullAssetPath")
+			canTranscribe = false
+		}
+	}
+
+	private suspend fun copyAssetToInternalStorage(assetPathToCopy: String, destinationFileName: String): File? = withContext(Dispatchers.IO) {
+		try {
+			val destinationFile = File(application.filesDir, destinationFileName)
+
+			if (destinationFile.exists()) {
+				destinationFile.delete() // Overwrite if exists for fresh test
+			}
+
+			application.assets.open(assetPathToCopy).use { inputStream ->
+				destinationFile.outputStream().use { outputStream ->
+					inputStream.copyTo(outputStream)
+				}
+			}
+			Log.i(LOG_TAG, "Asset '$assetPathToCopy' copied to '${destinationFile.absolutePath}'")
+			destinationFile // Return the File object of the copied file
+		} catch (e: IOException) {
+			printMessage("IOError copying asset '$assetPathToCopy' to '$destinationFileName': ${e.message}\n")
+			Log.e(LOG_TAG, "Failed to copy asset '$assetPathToCopy'", e)
+			null
+		}
+	}
+
+	private suspend fun copySamples() = withContext(Dispatchers.IO) {
+		val samplesPath = File(application.filesDir, "samples")
+		if (!samplesPath.exists()) {
+			samplesPath.mkdirs()
+		}
+		// Assuming you have 'copyData' as an extension function like in your original code
+		application.copyData("samples", samplesPath, ::printMessage)
 	}
 
 }
