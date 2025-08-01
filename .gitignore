@@ -20,8 +20,8 @@ app/src/main/assets/models/*.bin
 app/src/main/assets/models/*.ggml
 
 # Model binaries in lib androidTest assets (if you want to ignore them)
-lib/src/androidTest/assets/*.bin
-lib/src/androidTest/assets/*.ggml
+whispercore/src/androidTest/assets/*.bin
+whispercore/src/androidTest/assets/*.ggml
 
 # Other common ignores (you might already have some of these)
 *.apk
