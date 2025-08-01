@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.whispercpp.whisper.Whisper
-import com.whispercpp.whisper.WhisperDelegate
-import com.whispercpp.whisper.WhisperOperationError
+import com.redravencomputing.whisper.whispercore.Whisper
+import com.redravencomputing.whisper.whispercore.WhisperDelegate
+import com.redravencomputing.whisper.whispercore.WhisperOperationError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -70,7 +70,7 @@ class TestViewModel(private val application: Application) : ViewModel(), Whisper
 		if (models != null) {
 			whisper.initializeModelFromAsset("models/" + models[0])
 			printMessage("Loaded model ${models[0]}.\n")
-			canTranscribe = whisper.canTranscribe()
+			canTranscribe = whisper.canTranscribe
 		}
 
 		//val firstModel = modelsPath.listFiles()!!.first()
@@ -229,7 +229,7 @@ class TestViewModel(private val application: Application) : ViewModel(), Whisper
 				// or if your WhisperAPI updates its internal state that canTranscribe() reflects.
 				// For now, let's assume canTranscribe might be updated by a delegate or
 				// initializeModel is synchronous enough for the next line to be somewhat accurate.
-				canTranscribe = whisper.canTranscribe() // Check state
+				canTranscribe = whisper.canTranscribe // Check state
 				if (canTranscribe) {
 					printMessage("Model loaded successfully from path (canTranscribe is true).\n")
 				} else {

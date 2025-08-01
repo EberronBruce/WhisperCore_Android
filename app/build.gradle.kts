@@ -10,7 +10,7 @@ android {
 
 	defaultConfig {
 		applicationId = "com.redravencomputing.whisperdemo"
-		minSdk = 26
+		minSdk = 29
 		targetSdk = 36
 		versionCode = 1
 		versionName = "1.0"
@@ -43,7 +43,7 @@ kotlin {
 }
 
 dependencies {
-	implementation(project(":lib"))
+	implementation(project(":whispercore"))
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.lifecycle.runtime.ktx)
 	implementation(libs.androidx.activity.compose)

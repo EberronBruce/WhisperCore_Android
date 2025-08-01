@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-07-27T18:16:12.044955Z">
+        <DropdownSelection timestamp="2025-08-01T04:13:09.155104Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/Users/bruceburgess/.android/avd/Pixel_8_API_35.avd" />
@@ -13,10 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="Tests in 'com.whispercpp'">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testNativeFullTranscribeAndSegments()">
+      <SelectionState runConfigName="Tests in 'com.redravencomputing'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
