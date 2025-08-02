@@ -112,8 +112,6 @@ kotlin {
 
 dependencies {
 	implementation(libs.androidx.core.ktx)
-	implementation(libs.androidx.junit.ktx)
-	implementation(libs.androidx.rules)
 
 	testImplementation(libs.junit)
 	testImplementation(libs.mockk)
@@ -122,8 +120,8 @@ dependencies {
 	testImplementation(libs.mockito.kotlin)
 	testImplementation(libs.mockito.inline)
 
-	androidTestImplementation(libs.androidx.junit)
-	androidTestImplementation(libs.androidx.espresso.core)
+	androidTestImplementation(libs.androidx.junit.ktx)
+	androidTestImplementation(libs.androidx.rules)
 	androidTestImplementation(libs.mockito.android)
 	androidTestImplementation(libs.mockito.kotlin)
 	androidTestImplementation(libs.kotlinx.coroutines.test)
