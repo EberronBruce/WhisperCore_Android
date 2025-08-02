@@ -52,6 +52,7 @@ class TestViewModel(private val application: Application) : ViewModel(), Whisper
 			//loadBaseModel()
 			copySamples()
 			loadBaseModelUsingFilePath()
+//			whisper.enablePlayback(false)
 		} catch (e: Exception) {
 			Log.w(LOG_TAG, e)
 		}

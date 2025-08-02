@@ -116,7 +116,7 @@ internal class WhisperState(
 
 	private var recordedFile: File? = null
 	private var mediaPlayer: MediaPlayer? = null
-	private var audioPlaybackEnabled: Boolean = true // Default as per your MainScreenViewModel
+	private var audioPlaybackEnabled: Boolean = false
 
 //	private val recorder : IRecorder = Recorder()
 

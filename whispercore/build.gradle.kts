@@ -47,9 +47,7 @@ android {
 			}
 		}
 
-//		testOptions {
-//			unitTests.isReturnDefaultValues = true
-//		}
+
 	}
 
 	testBuildType = "debug"
@@ -114,10 +112,9 @@ kotlin {
 
 dependencies {
 	implementation(libs.androidx.core.ktx)
-	implementation(libs.androidx.appcompat)
-	implementation(libs.material)
 	implementation(libs.androidx.junit.ktx)
 	implementation(libs.androidx.rules)
+
 	testImplementation(libs.junit)
 	testImplementation(libs.mockk)
 	testImplementation(libs.kotlinx.coroutines.test)
@@ -128,7 +125,6 @@ dependencies {
 	androidTestImplementation(libs.androidx.junit)
 	androidTestImplementation(libs.androidx.espresso.core)
 	androidTestImplementation(libs.mockito.android)
-
 	androidTestImplementation(libs.mockito.kotlin)
 	androidTestImplementation(libs.kotlinx.coroutines.test)
 }
