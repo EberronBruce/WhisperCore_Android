@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-	namespace = "com.redravencomputing.whisper"
+	namespace = "com.redravencomputing.whispercore"
 	compileSdk = 36
 
 	buildFeatures {

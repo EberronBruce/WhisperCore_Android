@@ -1,4 +1,4 @@
-package com.redravencomputing.whisper.whispercore
+package com.redravencomputing.whispercore
 
 
 import android.Manifest
@@ -9,9 +9,9 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.redravencomputing.whisper.whispercore.media.AudioDecoder
-import com.redravencomputing.whisper.whispercore.recorder.IRecorder
-import com.redravencomputing.whisper.whispercore.recorder.Recorder
+import com.redravencomputing.whispercore.media.AudioDecoder
+import com.redravencomputing.whispercore.recorder.IRecorder
+import com.redravencomputing.whispercore.recorder.Recorder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

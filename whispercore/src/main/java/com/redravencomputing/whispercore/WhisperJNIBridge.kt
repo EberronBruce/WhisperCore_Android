@@ -1,4 +1,4 @@
-package com.redravencomputing.whisper.whispercore // Matching the JNI function name prefix
+package com.redravencomputing.whispercore // Matching the JNI function name prefix
 
 import android.content.res.AssetManager
 import android.util.Log

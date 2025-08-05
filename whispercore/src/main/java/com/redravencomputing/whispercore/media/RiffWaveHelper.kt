@@ -1,4 +1,4 @@
-package com.redravencomputing.whisper.whispercore.media
+package com.redravencomputing.whispercore.media
 
 import java.io.File
 import java.nio.ByteBuffer

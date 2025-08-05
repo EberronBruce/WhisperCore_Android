@@ -1,4 +1,4 @@
-package com.redravencomputing.whisper.whispercore
+package com.redravencomputing.whispercore
 import android.content.res.AssetManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher

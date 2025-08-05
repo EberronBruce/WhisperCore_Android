@@ -1,9 +1,9 @@
-package com.redravencomputing.whisper.whispercore
+package com.redravencomputing.whispercore
 
 import android.content.Context
 import android.util.Log
-import com.redravencomputing.whisper.BuildConfig
-import com.redravencomputing.whisper.whispercore.media.DefaultAudioDecoder
+import com.redravencomputing.whispercore.BuildConfig
+import com.redravencomputing.whispercore.media.DefaultAudioDecoder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,6 +12,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+
 
 /**
  * Public API for interacting with the Whisper speech-to-text engine.

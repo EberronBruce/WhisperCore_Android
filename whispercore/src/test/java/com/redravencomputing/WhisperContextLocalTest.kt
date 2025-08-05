@@ -1,8 +1,8 @@
 package com.redravencomputing
 
-import com.redravencomputing.whisper.whispercore.IWhisperJNI // << IMPORT THE INTERFACE
-import com.redravencomputing.whisper.whispercore.WhisperContext
-import com.redravencomputing.whisper.whispercore.WhisperCpuConfig // Keep this for now if WhisperContext uses it directly
+import com.redravencomputing.whispercore.IWhisperJNI // << IMPORT THE INTERFACE
+import com.redravencomputing.whispercore.WhisperContext
+import com.redravencomputing.whispercore.WhisperCpuConfig // Keep this for now if WhisperContext uses it directly
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just

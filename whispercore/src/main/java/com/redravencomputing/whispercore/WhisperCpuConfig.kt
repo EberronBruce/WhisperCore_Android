@@ -1,4 +1,4 @@
-package com.redravencomputing.whisper.whispercore
+package com.redravencomputing.whispercore
 
 import android.util.Log
 import java.io.BufferedReader

@@ -2,7 +2,7 @@ package com.redravencomputing
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.redravencomputing.whisper.whispercore.WhisperCpuConfig
+import com.redravencomputing.whispercore.WhisperCpuConfig
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith

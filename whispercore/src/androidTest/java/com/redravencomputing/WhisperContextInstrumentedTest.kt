@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.test.core.app.ApplicationProvider // Correct for context
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.redravencomputing.whisper.whispercore.WhisperContext
-import com.redravencomputing.whisper.whispercore.WhisperJNIBridge // Import for explicit loading
+import com.redravencomputing.whispercore.WhisperContext
+import com.redravencomputing.whispercore.WhisperJNIBridge // Import for explicit loading
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertNotNull

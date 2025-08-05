@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.redravencomputing.whisper.whispercore.Whisper
-import com.redravencomputing.whisper.whispercore.WhisperDelegate
-import com.redravencomputing.whisper.whispercore.WhisperOperationError
+import com.redravencomputing.whispercore.Whisper
+import com.redravencomputing.whispercore.WhisperDelegate
+import com.redravencomputing.whispercore.WhisperOperationError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

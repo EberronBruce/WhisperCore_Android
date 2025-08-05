@@ -258,7 +258,7 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved) {
 
 
 JNIEXPORT jlong JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_initContextFromInputStream(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_initContextFromInputStream(
         JNIEnv *env, jobject thiz, jobject input_stream_param) { // Renamed param for clarity
     UNUSED(thiz);
 
@@ -370,7 +370,7 @@ static struct whisper_context *whisper_init_from_asset(
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_initContextFromAsset(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_initContextFromAsset(
         JNIEnv *env, jobject thiz, jobject assetManager, jstring asset_path_str) {
     UNUSED(thiz);
     struct whisper_context *context = NULL;
@@ -381,7 +381,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_initContextFromA
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_initContext(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_initContext(
         JNIEnv *env, jobject thiz, jstring model_path_str) {
     UNUSED(thiz);
     struct whisper_context *context = NULL;
@@ -392,7 +392,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_initContext(
 }
 
 JNIEXPORT void JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_freeContext(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_freeContext(
         JNIEnv *env, jobject thiz, jlong context_ptr_long) {
     UNUSED(env);
     UNUSED(thiz);
@@ -410,7 +410,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_freeContext(
 }
 
 JNIEXPORT void JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_fullTranscribe(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_fullTranscribe(
         JNIEnv *env, jobject thiz, jlong context_ptr, jint num_threads, jfloatArray audio_data) {
     UNUSED(thiz);
     struct whisper_context *context = (struct whisper_context *) context_ptr;
@@ -494,7 +494,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_fullTranscribe(
 
 
 JNIEXPORT jint JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegmentCount(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_getTextSegmentCount(
         JNIEnv *env, jobject thiz, jlong context_ptr) {
     UNUSED(env);
     UNUSED(thiz);
@@ -503,7 +503,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegmentCo
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegment(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_getTextSegment(
         JNIEnv *env, jobject thiz, jlong context_ptr, jint index) {
     UNUSED(thiz);
     struct whisper_context *context = (struct whisper_context *) context_ptr;
@@ -513,7 +513,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegment(
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegmentT0(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_getTextSegmentT0(
         JNIEnv *env, jobject thiz, jlong context_ptr, jint index) {
     UNUSED(env);
     UNUSED(thiz);
@@ -522,7 +522,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegmentT0
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegmentT1(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_getTextSegmentT1(
         JNIEnv *env, jobject thiz, jlong context_ptr, jint index) {
     UNUSED(env);
     UNUSED(thiz);
@@ -531,11 +531,11 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getTextSegmentT1
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getSystemInfo(
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_getSystemInfo(
         JNIEnv *env,
         jobject thiz) { // 'thiz' will be the instance of the WhisperJNIBridge singleton
     // It's good practice to add logging inside your JNI functions for debugging
-    __android_log_print(ANDROID_LOG_INFO, "WhisperJNI", "Java_com_whispercpp_whisper_WhisperJNIBridge_getSystemInfo CALLED");
+    __android_log_print(ANDROID_LOG_INFO, "WhisperJNI", "Java_com_redravencomputing_whispercore_WhisperJNIBridge_getSystemInfo CALLED");
 
     UNUSED(thiz); // You can keep this if 'thiz' is truly not used.
     // For a Kotlin 'object', 'thiz' is the object instance.
@@ -552,7 +552,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_getSystemInfo(
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_benchMemcpy(JNIEnv *env, jobject thiz, jint n_threads) {
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_benchMemcpy(JNIEnv *env, jobject thiz, jint n_threads) {
     UNUSED(thiz);
     __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "Entering benchMemcpy, n_threads: %d", n_threads);
 
@@ -573,7 +573,7 @@ Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_benchMemcpy(JNIE
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_redravencomputing_whisper_whispercore_WhisperJNIBridge_benchGgmlMulMat(JNIEnv *env, jobject thiz, jint n_threads) {
+Java_com_redravencomputing_whispercore_WhisperJNIBridge_benchGgmlMulMat(JNIEnv *env, jobject thiz, jint n_threads) {
     UNUSED(thiz);
     __android_log_print(ANDROID_LOG_DEBUG, "WhisperJNI_Benchmark", "Entering benchGgmlMulMat, n_threads: %d", n_threads);
 

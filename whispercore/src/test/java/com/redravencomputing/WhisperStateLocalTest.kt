@@ -1,11 +1,11 @@
 package com.redravencomputing
 
 import android.content.Context
-import com.redravencomputing.whisper.whispercore.WhisperDelegate
-import com.redravencomputing.whisper.whispercore.WhisperOperationError
-import com.redravencomputing.whisper.whispercore.WhisperState
-import com.redravencomputing.whisper.whispercore.media.AudioDecoder
-import com.redravencomputing.whisper.whispercore.recorder.IRecorder
+import com.redravencomputing.whispercore.WhisperDelegate
+import com.redravencomputing.whispercore.WhisperOperationError
+import com.redravencomputing.whispercore.WhisperState
+import com.redravencomputing.whispercore.media.AudioDecoder
+import com.redravencomputing.whispercore.recorder.IRecorder
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify

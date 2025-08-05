@@ -5,7 +5,7 @@ import android.content.res.AssetManager
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.redravencomputing.whisper.whispercore.WhisperJNIBridge
+import com.redravencomputing.whispercore.WhisperJNIBridge
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue

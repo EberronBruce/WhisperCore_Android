@@ -1,4 +1,4 @@
-package com.redravencomputing.whisper.whispercore.recorder
+package com.redravencomputing.whispercore.recorder
 
 import android.Manifest
 import android.media.AudioFormat
@@ -6,7 +6,7 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import com.redravencomputing.whisper.whispercore.media.encodeWaveFile
+import com.redravencomputing.whispercore.media.encodeWaveFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.isActive
