@@ -2,7 +2,6 @@ package com.redravencomputing.whispercore
 
 import android.content.Context
 import android.util.Log
-import com.redravencomputing.whispercore.BuildConfig
 import com.redravencomputing.whispercore.media.DefaultAudioDecoder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -243,7 +242,7 @@ class Whisper(applicationContext: Context) {
 	 */
 	fun toggleRecording() {
 		Log.d(TAG, "toggleRecording called. Currently recording: $isRecording")
-		if (controller.isRecording) {
+		if (isRecording) {
 			apiScope.launch { // for stopRecording (suspend)
 				controller.stopRecording()
 			}
